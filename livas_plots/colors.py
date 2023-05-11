@@ -92,21 +92,16 @@ def backscatter_cbar_tick_formatter(x, pos):
 
 ## Depolarization ratio profile colors
 depol_colors = [
-    # "#000000",
-    # "#b22222",
-    # "#002AAA",
-    "#002AA2",
-    "#002A7F",
-    "#9932CC",
-    "#ffc0cb",
-    "#ff00ff",
-    "#ff0000",
-    "#ffa500",
+    "#00aaff",
+    "#00d400",
     "#ffff00",
-    "#32CD32",
-    "#00BFFF",
-    "#6495ed",
-    "#ffffff",
+    "#ffaa01",
+    "#fe0000",
+    "#ff00fe",
+    "#ffd4ff",
+    "#ab55fe",
+    "#646464",
+    "#969696",
 ]
 depol_bins = [
     # -3, -2, -1,
@@ -121,7 +116,6 @@ depol_bins = [
     0.8,
     0.9,
     1,
-    2,
 ]
 depol_labels = [
     # "Clouds",
@@ -137,7 +131,6 @@ depol_labels = [
     "0.8",
     "0.9",
     "1",
-    "2",
 ]
 depol_norm = BoundaryNorm(depol_bins, len(depol_colors), clip=True)
 depol_cbar = LinearSegmentedColormap.from_list(
