@@ -36,6 +36,7 @@ def plot_profile(
     nc: Dataset,
     altitude_range=(0, 10),
     fig_kwargs={},
+    trim=None,
 ):
     fig, ax = plt.subplots(1, 1, **fig_kwargs)
     fig.suptitle(f"CALIPSO-LIVAS {info.title}")
@@ -82,7 +83,8 @@ def plot_profile(
 
     # x Axis
     ax.set_xlabel("Latitude, Longitude")
-    ax.set_xlim(0, latitude.shape[0] - 20)
+    if trim != None:
+        ax.set_xlim(trim[0], trim[1])
     ax.xaxis.set_major_locator(LinearLocator(6))
     ax.xaxis.set_major_formatter(
         FuncFormatter(lambda x, pos: lat_lon_formatter(x, pos, latitude, longitude))
@@ -93,7 +95,9 @@ def plot_profile(
     fig.savefig(filename, dpi=300)
 
 
-def plot_trajectory(output_directory: Path, nc: Dataset, fig_kwargs: dict = {}):
+def plot_trajectory(
+    output_directory: Path, nc: Dataset, fig_kwargs: dict = {}, trim=None
+):
     fig, ax = plt.subplots(
         1, 1, **fig_kwargs, subplot_kw={"projection": ccrs.PlateCarree()}
     )
@@ -125,6 +129,17 @@ def plot_trajectory(output_directory: Path, nc: Dataset, fig_kwargs: dict = {}):
         s=15,
         transform=ccrs.PlateCarree(),
     )
+
+    # Plot trim, if used
+    if trim != None:
+        ax.scatter(
+            longitude[trim[0] : trim[1]],
+            latitude[trim[0] : trim[1]],
+            label="Visible",
+            color="b",
+            s=1,
+            transform=ccrs.PlateCarree(),
+        )
 
     # Add ticks
     ax.yaxis.tick_right()

@@ -12,30 +12,19 @@ def check_coordinates(loc: tuple[float, float]):
     assert -180 <= loc[1] <= 180
 
 
-def find_nearest_location(
-    loc: tuple[float, float], latitude: np.ndarray, longitude: np.ndarray
-) -> tuple[tuple[float, float], tuple[int, int]]:
+def find_nearest_location(l: float, latitude: np.ndarray) -> tuple[float, int]:
     """
-    Given a pair of coordinates and the Latitude, Longitude arrays of a LIVAS file,
-    returns the nearest location in the file and its index.
+    Returns the nearest latitude in the given array, as well as its index.
 
     Args:
-        loc: The location to search for (latitude, longitude)
+        l: The location to search for (latitude
         latitude: The Latitude array from the LIVAS file.
-        longitude: The Longitude array from the LIVAS file.
 
     Returns:
-        A tuple containing two tuples: the first tuple contains the nearest location in
-        the file (latitude, longitude pair), the second tuple contains the index of the
-        nearest location in the file (latitude index, longitude index pair)
+        A tuple containing the nearest latitude and its index.
     """
-    assert latitude.shape == longitude.shape
-    check_coordinates(loc)
-
     latitude = latitude[:, 1]
-    longitude = longitude[:, 1]
 
-    lat_i = np.argmin(np.abs(latitude - loc[0]))
-    lon_i = np.argmin(np.abs(longitude - loc[1]))
+    lat_i = np.argmin(np.abs(latitude - l))
 
-    return (latitude[lat_i], longitude[lon_i]), (lat_i, lon_i)
+    return latitude[lat_i], lat_i

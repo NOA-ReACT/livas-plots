@@ -12,6 +12,12 @@ and where to write the output PNG files:
 livas_plots LIVAS_CALIPSO_L2_Orbit_2015-09-23T22-26-37ZN.nc ./plots
 ```
 
+There are some optional arguments to change the visible altitude range and/or display a smaller part of the file (spatially). You can access more info about these through the included help:
+
+```sh
+livas_plots --help
+```
+
 ## Supported plots
 
 ### Per-grid
