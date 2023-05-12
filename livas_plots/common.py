@@ -18,6 +18,7 @@ from cartopy.mpl.ticker import (
 class Plot(NamedTuple):
     title: str
     variable: Union[str, Callable]
+    variable_label: str
     colorbar: Colormap
     norm: Normalize
     fig_kwargs: dict = {}
@@ -66,14 +67,10 @@ def plot_profile(
     p = ax.pcolormesh(xx, yy, v, cmap=info.colorbar, norm=info.norm)
 
     # Colorbar
-    units = None
-    if isinstance(var, NCVariable):
-        if "units" in var.ncattrs():
-            units = var.units
     cbar = fig.colorbar(
         p,
         ax=ax,
-        label=units,
+        label=info.variable_label,
         **info.colorbar_kwargs,
     )
 
@@ -93,6 +90,8 @@ def plot_profile(
     ax.xaxis.set_major_formatter(
         FuncFormatter(lambda x, pos: lat_lon_formatter(x, pos, latitude, longitude))
     )
+
+    fig.tight_layout()
 
     sanitized_title = info.title.replace(" ", "_").replace(",", "")
     filename = output_directory / f"{sanitized_title}.png"
