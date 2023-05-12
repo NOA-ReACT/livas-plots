@@ -8,7 +8,14 @@ from livas_plots.common import Plot
 
 def copy_filter(nc, source_var, target_var):
     arr = nc[target_var][:]
-    mask = np.isnan(nc[source_var][:])
+    if isinstance(source_var, str):
+        mask = np.isnan(nc[source_var][:])
+    elif isinstance(source_var, list):
+        mask = np.zeros_like(arr.data, dtype=bool)
+        for var in source_var:
+            mask |= np.isnan(nc[var][:])
+    else:
+        raise ValueError("source_var must be str or list")
 
     arr[mask] = np.nan
     return arr
@@ -170,7 +177,10 @@ PER_ORBIT_PLOTS = [
         title="Particulate Depolarization Ratio 532 nm (Cloud-free)",
         variable=lambda nc: copy_filter(
             nc,
-            source_var="LIVAS/Cloud_Free/Pure_Dust_and_Fine_Coarse/Optical_Products/Pure_Dust_Backscatter_Coefficient_532",
+            source_var=[
+                "LIVAS/CALIPSO_Optical_Products_Smoothed/Altitudinally_Smoothed_by_180m/Particulate_Depolarization_Ratio_532",
+                "LIVAS/Cloud_Free/Pure_Dust_and_Fine_Coarse/Optical_Products/Pure_Dust_Backscatter_Coefficient_532",
+            ],
             target_var="CALIPSO_Optical_Products/Particulate_Depolarization_Ratio_Profile_532",
         ),
         variable_label="Depolarization Ratio",
