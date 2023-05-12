@@ -52,10 +52,11 @@ def plot_profile(
     last_day, last_time = time[-1][0:10], time[-1][11:16]
     ax.set_title(f"{first_day} {first_time} → {last_time} UTC")
 
-    altitude, latitude, longitude = (
+    altitude, latitude, longitude, surface_elevation = (
         nc["Altitude"][:],
         nc["Latitude"][:],
         nc["Longitude"][:],
+        nc["CALIPSO_Flags_and_Auxiliary/Auxiliary/Surface_Elevation_Statistics"],
     )
 
     xx, yy = np.meshgrid(range(longitude.shape[0]), altitude.data)
@@ -75,6 +76,9 @@ def plot_profile(
         label=units,
         **info.colorbar_kwargs,
     )
+
+    # Surface elevation
+    ax.plot(surface_elevation[:, 1], color="#dc2626", lw=0.5)
 
     # Y Axis
     ax.set_ylim(*altitude_range)
