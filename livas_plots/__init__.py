@@ -21,12 +21,12 @@ def plot_per_orbit(
     trim_lat_end: Annotated[str, typer.Option()] = None,
 ):
     output_directory.mkdir(exist_ok=True, parents=True)
+    print(trim_lat_start, trim_lat_end)
     with netCDF4.Dataset(file_path) as nc:
         # Find start/end indices
         latitude = nc.variables["Latitude"][:]
-        longitude = nc.variables["Longitude"][:]
         start_idx = 0
-        end_idx = -1
+        end_idx = latitude.shape[0] - 1
         if trim_lat_start is not None:
             start_idx = utils.find_nearest_location(float(trim_lat_start), latitude)[1]
             print("Plotting from index", start_idx)
